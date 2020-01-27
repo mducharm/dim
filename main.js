@@ -21,3 +21,12 @@ var stringToHTML = function (str) {
     return dom
 };
 
+var getAttributes = (attributes) => {
+    return Array.prototype.map.call(attributes, (attribute) => {
+        return {
+            att: attribute.name,
+            value: attribute.value
+        };
+    })
+}
+
