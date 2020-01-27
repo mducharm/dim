@@ -69,6 +69,20 @@ var diff = (templateMap, domMap, elem) => {
     });
 }
 
+var createNode = (elem) => {
+    let opts = [
+        [elem.type === 'text', () => document.createTextNode(elem.content)],
+        [elem.type === 'comment', () => document.createComment(elem.content)],
+        [elem.isSVG, () => document.createElementNS('http://www.w3.org/2000/svg', elem.type)],
+    ]
+
+    opts.reduce((prev, curr) => {
+        if (curr[0]) return curr[1];
+
+        return prev;
+    }, () => document.createElement(elem.type));
+
+}
 
 var makeElem = (elem) => {
     var node;
