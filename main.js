@@ -70,6 +70,32 @@ var diff = (templateMap, domMap, elem) => {
 }
 
 
+var makeElem = (elem) => {
+    var node;
+
+    if (elem.type === 'text') {
+        node = document.createTextNode(elem.content);
+    }
+    else if (elem.type === 'comment') {
+        node = document.createComment(elem.content);
+    } else if (elem.isSVG) {
+        node = document.createElementNS('http://www.w3.org/2000/svg', elem.type);
+    } else {
+        node = document.createElement(elem.type);
+    }
+
+    addAttributes(node, elem.atts);
+
+    if (elem.children.length > 0) {
+        elem.children.forEach((child => {
+            node.appendChild(makeElem(child));
+        }));
+    } else if (elem.type !== 'text') {
+        node.textContent = elem.content;
+    }
+
+    return node;
+}
 
 var addAttributes = (elem, atts) => {
     atts.forEach((attribute) => {
