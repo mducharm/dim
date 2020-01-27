@@ -84,6 +84,21 @@ var createNode = (elem) => {
 
 }
 
+var ifing = (...pairs) => {
+    return pairs.reduce((previous, current) => {
+
+    },
+        () =>   
+  )
+}
+
+ifing(
+    [elem.type === 'text', () => document.createTextNode(elem.content)],
+    [elem.type === 'comment', () => document.createComment(elem.content)],
+    [elem.isSVG, () => document.createElementNS('http://www.w3.org/2000/svg', elem.type)],
+    [true, () => document.createElement(elem.type)]
+)
+
 var makeElem = (elem) => {
     var node;
 
