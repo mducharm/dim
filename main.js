@@ -53,6 +53,22 @@ var getAttributes = (attributes) => {
     })
 }
 
+var diff = (templateMap, domMap, elem) => {
+
+    var count = domMap.length - templateMap.length;
+    if (count > 0) {
+        // remove extra nodes
+        for (; count > 0; count--) {
+            domMap[domMap.length - count].node.parentNode.removeChild(domMap[domMap.length - count].node);
+        }
+    }
+
+    // Diff each item
+    templateMap.forEach((node, index) => {
+
+    });
+}
+
 
 
 var addAttributes = (elem, atts) => {
