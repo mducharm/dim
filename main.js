@@ -102,3 +102,19 @@ var addAttributes = (elem, atts) => {
         elem.setAttribute(attribute.att, attribute.value);
     })
 }
+
+var template = `<h1>Hello</h1>
+<p>some text</p>
+<p>some text</p>
+<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewbox="0 0 800 800" aria-described="title-thumbsup">
+    <title id="title-thumbsup">Thumbs Up!</title>
+    <path d="M725 450c57.031 0 25 150-25 150 25 0 0 125-50 125 0 50-50 75-100 75-211.212 0-136.925-52.852-350-75V325C388.22 268.541 575 127.012 575 0c41.406 0 150 50 0 300h150c75 0 50 150 0 150zM150 325v400h50v25H100c-27.5 0-50-33.75-50-75V375c0-41.25 22.5-75 50-75h100v25h-50z"/>
+</svg>
+`
+
+var app = document.querySelector('#app');
+
+var templateMap = createDOMMap(stringToHTML(template));
+var domMap = createDOMMap(app);
+
+diff(templateMap, domMap, app);
