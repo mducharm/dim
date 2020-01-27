@@ -21,6 +21,29 @@ var stringToHTML = function (str) {
     return dom
 };
 
+var createDOMMap = (element, isSVG) => {
+    return Array.prototype.map.call(element.childNodes, ((node) => {
+        var details = {
+            content: node.childNodes && node.childNodes.length > 0
+                ? null
+                : node.textContent,
+            atts: node.nodeType !== 1
+                ? []
+                : getAttributes(node.attributes),
+            type: node.nodeType === 3
+                ? 'text'
+                : (node.nodeType === 8
+                    ? 'comment'
+                    : node.tagName.toLowerCase()),
+            node: node
+        };
+
+        details.isSVG = isSVG || details.type === 'svg';
+        details.children = createDOMMap(node, details.isSVG);
+        return details
+    }))
+}
+
 var getAttributes = (attributes) => {
     return Array.prototype.map.call(attributes, (attribute) => {
         return {
