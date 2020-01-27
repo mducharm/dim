@@ -53,3 +53,10 @@ var getAttributes = (attributes) => {
     })
 }
 
+
+
+var addAttributes = (elem, atts) => {
+    atts.forEach((attribute) => {
+        elem.setAttribute(attribute.att, attribute.value);
+    })
+}
