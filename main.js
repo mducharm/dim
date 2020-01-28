@@ -91,6 +91,9 @@ var diffAtts = (template, existing) => {
         var getAtt = find(existing.atts, (existingAtt) => att.att === existingAtt.att);
         return getAtt === undefined || getAtt.value !== att.value;
     });
+
+    addAttributes(existing.node, change);
+    removeAttributes(existing.node, remove);
 }
 
 
@@ -133,6 +136,18 @@ var addAttributes = (elem, atts) => {
             // })
         } else {
             elem.setAttribute(attribute.att, attribute.value || true);
+        }
+    })
+}
+
+var removeAttributes = (elem, atts) => {
+    atts.forEach(attribute => {
+        if (attribute.att === 'class') {
+            elem.className = '';
+        } else if (attribute.att === 'style') {
+            removeStyles(elem, Array.prototype.slice.call(elem.style))
+        } else {
+            elem.removeAttribute(attribute.att);
         }
     })
 }
