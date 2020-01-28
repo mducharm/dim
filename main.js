@@ -64,15 +64,43 @@ var diff = (templateMap, domMap, elem) => {
     }
     // Diff each item
     templateMap.forEach((node, index) => {
-        
+
+        // Create if element doesn't exist
         if (!domMap[index]) {
             elem.appendChild(makeElem(templateMap[index]));
             return;
         }
 
+        // Replace with new element if not same type
         if (templateMap[index].type !== domMap[index].type) {
             domMap[index].node.parentNode.replaceChild(makeElem(templateMap[index]), domMap[index].node);
             return;
+        }
+
+        diffAtts(templateMap[index], domMap[index]);
+
+        // Update if content is different
+        if (templateMap[index].content !== domMap[index].content) {
+            domMap[index].node.textContent = templateMap[index].content;
+            return;
+        }
+
+        // Clear if element should be empty
+        if (domMap[index].children.length > 0 && node.children.length < 1) {
+            domMap[index].node.innerHTML = '';
+            return;
+        }
+
+        // If element is empty and shouldn't be
+        if (domMap[index].children.length < 1 && node.children.length > 0) {
+            var fragment = document.createDocumentFragment();
+            diff(node.children, domMap[index].children, fragment);
+            elem.appendChild(fragment);
+            return;
+        }
+
+        if (node.children.length > 0) {
+            diff(node.children, domMap[index].children, domMap[index].node);
         }
 
     });
