@@ -62,10 +62,34 @@ var diff = (templateMap, domMap, elem) => {
             domMap[domMap.length - count].node.parentNode.removeChild(domMap[domMap.length - count].node);
         }
     }
-
     // Diff each item
     templateMap.forEach((node, index) => {
+        
+        if (!domMap[index]) {
+            elem.appendChild(makeElem(templateMap[index]));
+            return;
+        }
 
+        if (templateMap[index].type !== domMap[index].type) {
+            domMap[index].node.parentNode.replaceChild(makeElem(templateMap[index]), domMap[index].node);
+            return;
+        }
+
+    });
+}
+
+var diffAtts = (template, existing) => {
+
+    // get attributes to remove
+    var remove = existing.atts.filter((att) => {
+        var getAtt = template.atts.find((newAtt) => att.att === newAtt.att);
+        return getAtt === undefined;
+    });
+
+    // get attributes to change
+    var change = template.atts.filter((att) => {
+        var getAtt = find(existing.atts, (existingAtt) => att.att === existingAtt.att);
+        return getAtt === undefined || getAtt.value !== att.value;
     });
 }
 
