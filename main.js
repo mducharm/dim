@@ -126,14 +126,40 @@ var addAttributes = (elem, atts) => {
         if (attribute.att === 'class') {
             elem.className = attribute.value;
         } else if (attribute.att === 'style') {
-            var styles = getStyleMap(attribute.value);
-            styles.forEach((style) => {
-                elem.style[style.name] = style.value;
-            })
+            diffStyles(elem, attribute.value);
+            // var styles = getStyleMap(attribute.value);
+            // styles.forEach((style) => {
+            //     elem.style[style.name] = style.value;
+            // })
         } else {
             elem.setAttribute(attribute.att, attribute.value || true);
         }
     })
+}
+
+var diffStyles = (elem, styles) => {
+    var styleMap = getStyleMap(styles);
+    var remove = Array.prototype.filter.call(elem.style, (style) => {
+        var findStyle = styleMap.find((newStyle) =>
+            newStyle.name === style && newStyle.value === elem.style[style]);
+
+        return findStyle === undefined;
+    });
+
+    removeStyles(elem, remove);
+    changeStyles(elem, styleMap);
+};
+
+var removeStyles = (elem, styles) => {
+    styles.forEach((style) => {
+        elem.style[style] = ''
+    });
+}
+
+var changeStyles = (elem, styles) => {
+    styles.forEach((style) => {
+        elem.style[style.name] = style.value;
+    });
 }
 
 var getStyleMap = (styles) => {
