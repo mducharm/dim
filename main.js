@@ -99,8 +99,30 @@ var makeElem = (elem) => {
 
 var addAttributes = (elem, atts) => {
     atts.forEach((attribute) => {
-        elem.setAttribute(attribute.att, attribute.value);
+        if (attribute.att === 'class') {
+            elem.className = attribute.value;
+        } else if (attribute.att === 'style') {
+            var styles = getStyleMap(attribute.value);
+            styles.forEach((style) => {
+                elem.style[style.name] = style.value;
+            })
+        } else {
+            elem.setAttribute(attribute.att, attribute.value || true);
+        }
     })
+}
+
+var getStyleMap = (styles) => {
+    return styles.split(';').reduce((arr, style) => {
+        if (style.trim().indexOf(':') > 0) {
+            var styleArr = style.split(':');
+            arr.push({
+                name: styleArr[0] ? styleArr[0].trim() : '',
+                value: styleArr[1] ? styleArr[1].trim() : '',
+            })
+            return arr;
+        }
+    }, [])
 }
 
 var template = `<h1>Hello</h1>
